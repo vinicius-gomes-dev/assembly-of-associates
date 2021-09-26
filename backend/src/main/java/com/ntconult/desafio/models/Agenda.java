@@ -1,22 +1,26 @@
 package com.ntconult.desafio.models;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import lombok.Data;
 
 @Data
 @Entity
-public class Agenda {
+@Table(name = "tb_agendas")
+public class Agenda implements Serializable {
 	
+	// Needed Serializable implementation to use the Composite Primary Key
+	private static final long serialVersionUID = 1L;
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(nullable = false)
@@ -25,16 +29,22 @@ public class Agenda {
 	@Column(nullable = false)
 	private Boolean vote;
 	
-	@Column(nullable = false)
+	@Column(name = "is_closed", nullable = false)
 	private Boolean isClosed;
 	
+	// Duration in minutes
 	@Column(nullable = false)
+	private Integer duration;
+	
+	@Column(name = "start_of_session", nullable = false)
 	private LocalDateTime startOfSession;
 	
-	@Column(nullable = false)
+	@Column(name = "end_of_session", nullable = false)
 	private LocalDateTime endOfSesion;
 	
 	@ManyToOne
+	@JoinColumn(name = "associate_id")
+	@Id
 	private Associate associate;
 
 }
