@@ -5,9 +5,9 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -21,30 +21,20 @@ public class Agenda implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(nullable = false)
 	private String description;
 	
-	@Column(nullable = false)
-	private Boolean vote;
-	
-	@Column(name = "is_closed", nullable = false)
-	private Boolean isClosed;
-	
 	// Duration in minutes
-	@Column(nullable = false)
-	private Integer duration;
+	@Column(name = "session_time_minutes", nullable = false)
+	private long sessionTimeMinutes;
 	
-	@Column(name = "start_of_session", nullable = false)
+	@Column(name = "start_of_session")
 	private LocalDateTime startOfSession;
 	
-	@Column(name = "end_of_session", nullable = false)
+	@Column(name = "end_of_session")
 	private LocalDateTime endOfSesion;
 	
-	@ManyToOne
-	@JoinColumn(name = "associate_id")
-	@Id
-	private Associate associate;
-
 }

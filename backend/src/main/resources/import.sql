@@ -13,6 +13,8 @@ INSERT INTO tb_associates(cpf,name) VALUES ('51387167006', 'Jack Purple'); -- 51
 --DECLARE @NOW TIMESTAMP;
 SET @NOW = CURRENT_TIMESTAMP();
 
-INSERT INTO tb_agendas(id, associate_id, description, vote, is_closed, duration, start_of_session, end_of_session) VALUES (1, 1, 'La pergunta?', TRUE, FALSE, 1, @NOW, DATEADD('MINUTE', 1, @NOW));
---INSERT INTO tb_agendas(id, associate_id, description, vote, is_closed, duration, start_of_session, end_of_session) VALUES (1, 2, 'La pergunta?', TRUE, FALSE, 1, @NOW, DATEADD('MINUTE', 1, @NOW));
+INSERT INTO tb_agendas(description, session_time_minutes, start_of_session, end_of_session) VALUES ('La pergunta?', 1, @NOW, DATEADD('MINUTE', 1, @NOW));
+INSERT INTO tb_agendas(description, session_time_minutes, start_of_session, end_of_session) VALUES ('Cuma?', 1, @NOW, DATEADD('MINUTE', 1, @NOW));
 
+--INSERT INTO tb_voting_sessions(associate_id, agenda_id, vote, date_vote, is_closed) VALUES (1, 1, TRUE, @NOW, FALSE);
+--INSERT INTO tb_voting_sessions(associate_id, agenda_id, vote, date_vote, is_closed) VALUES (1, 1, TRUE, @NOW, FALSE);
