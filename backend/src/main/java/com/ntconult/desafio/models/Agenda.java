@@ -37,4 +37,5 @@ public class Agenda implements Serializable {
 	@Column(name = "end_of_session")
 	private LocalDateTime endOfSesion;
 	
+	
 }
