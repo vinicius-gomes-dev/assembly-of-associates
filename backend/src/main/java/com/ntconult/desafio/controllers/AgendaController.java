@@ -1,50 +1,117 @@
 package com.ntconult.desafio.controllers;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ntconult.desafio.models.Agenda;
-import com.ntconult.desafio.repositories.AgendaRepository;
+import com.ntconult.desafio.dto.agenda.AgendaRequestDTO;
+import com.ntconult.desafio.dto.agenda.AgendaResponseDTO;
+import com.ntconult.desafio.services.AgendaService;
 
 @RestController
 @RequestMapping("/agendas")
 public class AgendaController {
 	
 	@Autowired
-	private AgendaRepository agendaRepository;
+	private AgendaService service;
+	
+	
 	
 	@GetMapping
-	public List<Agenda> findAll() {
-		List<Agenda> agendas = agendaRepository.findAll();
-		return agendas;
+	public ResponseEntity<List<AgendaResponseDTO>> findAll() {
+		List<AgendaResponseDTO> agendaResDTO;
+		agendaResDTO= service.findAll();
+		
+		return ResponseEntity.ok(agendaResDTO);
 	}
 	
-	@GetMapping("/{id}")
-	public Optional<Agenda> findById(@PathVariable Long id) {
-		Optional<Agenda> agenda = agendaRepository.findById(id);
+	@GetMapping(path = "/{id}")
+	public ResponseEntity<AgendaResponseDTO> findById(@PathVariable Long id) {
+		AgendaResponseDTO agendaResDTO;
+		agendaResDTO= service.findById(id);
 		
-		return agenda;
+		return ResponseEntity.ok(agendaResDTO);
 	}
 	
 	@PostMapping(path = "/register")
-	public Agenda register(@RequestBody Agenda agenda) {
-		long time = (agenda.getSessionTimeMinutes() > 0L) ? agenda.getSessionTimeMinutes() : 1L;
-		agenda.setSessionTimeMinutes(time);
-		LocalDateTime now = LocalDateTime.now();
-		agenda.setStartOfSession(now);
-		agenda.setEndOfSesion(now.plusMinutes(time));
+	@ResponseStatus(value = HttpStatus.CREATED)
+	public ResponseEntity<AgendaResponseDTO> register(@RequestBody AgendaRequestDTO agendaReqDTO) {
+		AgendaResponseDTO agendaResDTO;
+		agendaResDTO = service.register(agendaReqDTO);
 		
-		return agendaRepository.save(agenda);
+		return ResponseEntity.ok(agendaResDTO);
+		
 	}
+	
+	
+	
+//	@Autowired
+//	private AgendaRepository agendaRepository;
+//	
+//	@Autowired
+//	private AssociateRepository associateRepository;
+//	
+//	@Autowired
+//	private VoteRepository voteRepository;
+//	
+//	@GetMapping
+//	public List<Agenda> findAll() {
+//		List<Agenda> agendas = agendaRepository.findAll();
+//		
+//		return agendas;
+//	}
+//	
+//	@GetMapping(path = "/{id}")
+//	public Optional<Agenda> findById(@PathVariable Long id) {
+//		Optional<Agenda> agenda = agendaRepository.findById(id);
+//		
+//		return agenda;
+//	}
+//	
+//	@PostMapping(path = "/register")
+//	@ResponseStatus(value = HttpStatus.CREATED)
+//	public Agenda register(@RequestBody Agenda agendaParam) {
+//		
+//		long time = (agendaParam.getSessionTimeMinutes() > 0L) ? agendaParam.getSessionTimeMinutes() : 1L;
+//		agendaParam.setSessionTimeMinutes(time);
+//		LocalDateTime now = LocalDateTime.now();
+//		agendaParam.setStartOfSession(now);
+//		agendaParam.setEndOfSesion(now.plusMinutes(time));
+//		
+//		Agenda agenda = agendaRepository.save(agendaParam);
+//		
+//		return agenda;
+//	}
+
+//	
+//	@PostMapping(path = "/{id}/vote")
+//	public Vote vote(@PathVariable Long id, @RequestBody Vote voteParam) {
+//		Agenda agenda = agendaRepository.getById(id);
+//		voteParam.setAgenda(agenda);
+//		
+//		Associate associate = associateRepository.getById(1L);
+//		voteParam.setAssociate(associate);
+//		
+//		Vote vote = voteRepository.save(voteParam);
+//		
+//		return vote;
+//	}
+//	
+//	@GetMapping(path = "/votes")
+//	public List<Vote> findAllVotes() {
+//		List<Vote> votes = voteRepository.findAll();
+//		
+//		return votes;
+//	}
 	
 
 }
